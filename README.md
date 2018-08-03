@@ -167,7 +167,7 @@ The robot's dependencies are: the Messenger instance and the Table instance. It 
 
 **Messenger** is a class that incapsulates all the behaviour of preparing any messages a robot can send to a user. It is the robot's dependency. It has only one public method that the robot calls when it has some message to a user:    
 
-- getMessage(msgConfigObj)    
+- getMessage(messageConfig)
 
 The Messenger's configuration data is stored in `config.js` file.   
 
