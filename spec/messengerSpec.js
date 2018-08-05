@@ -20,6 +20,20 @@ describe('The Messenger', () => {
     f = 'south';
   });
 
+  it('should throw an error when get message with no config', () => {
+    expect(messenger.getMessage().message).toEqual(new Error(messenger.getMessage({
+      msg: 'needMessageConfig'
+    })).message);
+  });
+
+  it('should throw an error when get message with wrong key', () => {
+    let wrongKey = 'blah';
+    expect(messenger.getMessage({ msg: wrongKey }).message).toEqual(new Error(messenger.getMessage({
+      msg: 'messageKeyNotFound',
+      key: wrongKey
+    })).message);
+  });
+
   /**
    * To test each message separatly is not a good solution - it makes us to
    * manually create a new it('...') everytime we have a new message.

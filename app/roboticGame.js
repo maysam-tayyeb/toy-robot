@@ -13,6 +13,7 @@ const os = require("os"); // to have platform independent EOL
 const fs = require('fs'); // to check if a file exists and is readable and to create a stream
 const path = require('path');
 const readline = require('readline'); // Readline class. To read commands from a file
+const EventEmitter = require('events').EventEmitter;
 
 let config = require('./config');
 let Table = require('./table');
@@ -31,9 +32,11 @@ let rl; // readline instance
  * Game class
  * It has only one static method .run() to start the app
  */
-class RoboticGame {
+class RoboticGame extends EventEmitter {
 
   constructor() {
+    super();
+
     this.robot = new Robot(config.robot,
       new Table(config.table),
       new Messenger(config.messenger));
@@ -68,20 +71,21 @@ class RoboticGame {
 
 
     rl = readline.createInterface({
-      input: fs.createReadStream(absolutePath),
+      input: fs.createReadStream(absolutePath, 'utf-8'),
       terminal: false
     });
 
     // event handler. is called when a line is read from a file
     rl.on('line', (line) => {
-      stdout.write(line + EOL);
-      this._doOutput(line);
+      stdout.write(line.trim() + EOL);
+      this._processInput(line);
     });
 
     // event handler. is called when all the lines in a file have been read
     // closes a stream and exit
     rl.on('close', () => {
       rl.close();
+      this.emit('fileClosed', fileName);
     });
   }
 
@@ -95,7 +99,7 @@ class RoboticGame {
    * @return {Error|String|Object} Returns either an Error instance, or a message
    * string, or the robot instance. A successful action returns robot's instance.
    */
-  _doAction(command) {
+  _actionCommand(command) {
     let res;
     // PLACE X(,| )Y(,| )F(  *)
     if (command.match(/^\s*place\s+\w+(?:,?\s*|\s+)\w+(?:,?\s*|\s+)\w+\s*$/i)) {
@@ -118,27 +122,44 @@ class RoboticGame {
   }
 
   /**
-   * Sends a response from _doAction() to stdout or stderr
+   * Sends a response from _actionCommand() to stdout or stderr
    * @private
    * @method
    * @param  {Error|String|Object} data either an Error instance, or a message string,
    * or robot instance.
    * @return {undefined} no return. the func only sends to stdout or stderr
    */
-  _doOutput(data) {
-    let res, _data = data.trim();
+  _processInput(data) {
+    let response;
 
-    if (_data.match(/(q|quit|exit)/i))
+    data = data.trim();
+
+    if (data.match(/(q|quit|exit)/i)) {
       process.exit();
+    }
 
-    res = this._doAction(_data);
-    if (res instanceof Error) {
-      stdout.write(res.message + EOL + '> ');
-    } else if (typeof res === 'string') {
-      stdout.write(res + EOL + '> ');
+    response = this._actionCommand(data);
+    if (response instanceof Error) {
+      stdout.write(response.message + EOL + '> ');
+    } else if (typeof response === 'string') {
+      stdout.write(response + EOL + '> ');
     } else {
       stdout.write('> ');
     }
+  }
+
+  _initializeStdIn() {
+    // read stdin
+    // this piece of code is for reading user's input from CLI
+    stdin.setEncoding('utf8');
+    stdin.on('data', (data) => this._processInput(data));
+
+    stdout.write(this.robot.getMessenger().getMessage({
+      msg: 'welcome',
+      eol: EOL
+    }) + EOL + '> ');
+
+    stdin.resume();
   }
 
   run() {
@@ -146,15 +167,7 @@ class RoboticGame {
       this._readFromFile(argv[0]);
     }
 
-    // read stdin
-    // this piece of code is for reading user's input from CLI
-    stdin.setEncoding('utf8');
-    stdin.on('data', (data) => this._doOutput(data));
-    stdout.write(this.robot.getMessenger().getMessage({
-      msg: 'welcome',
-      eol: EOL
-    }) + EOL + '> ');
-    stdin.resume();
+    this._initializeStdIn();
   };
 }
 

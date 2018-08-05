@@ -152,34 +152,28 @@ class Robot {
 
   /**
    * Send a message to a user
-   * @param  {Object} msgObj {msg 'msgKey', [anyOtherKeys: ....]}
-   * Possible keys are defined in the config.
-   * @return {[type]}        [description]
+   * @return {String} proper message
    */
-  report(msgObj) {
-    // Call .report() without any parameters.
-    if (!msgObj) {
-      let position = this._getPosition();
+  report() {
+    let position = this._getPosition();
 
-      // Very beginning, no any PLACE yet, coords are undefined
-      // return a message "PLACE me to begin", not coordinates
-      if (position.x === undefined &&
-        position.y === undefined &&
-        position.f === undefined) {
-        return this._messenger.getMessage({
-          msg: 'placeMeFirst'
-        });
-        // coordinates are defined, return robot's position msg
-      } else {
-        return this._messenger.getMessage({
-          msg: 'position',
-          x: position.x,
-          y: position.y,
-          f: position.f
-        });
-      }
-    } else
-      return this._messenger.getMessage(msgObj);
+    // Very beginning, no any PLACE yet, coords are undefined
+    // return a message "PLACE me to begin", not coordinates
+    if (position.x === undefined &&
+      position.y === undefined &&
+      position.f === undefined) {
+      return this._messenger.getMessage({
+        msg: 'placeMeFirst'
+      });
+      // coordinates are defined, return robot's position msg
+    } else {
+      return this._messenger.getMessage({
+        msg: 'position',
+        x: position.x,
+        y: position.y,
+        f: position.f
+      });
+    }
   }
 
   /**
@@ -296,19 +290,6 @@ class Robot {
    */
   _getIsFirstStepMade() {
     return this._isFirstStepMade;
-  }
-
-  _isFirstStepMadeFunc() {
-    if (!this._isFirstStepMade) {
-      return this.report({
-        msg: 'noInitialCommand'
-      });
-    } else
-      return true;
-  }
-
-  _setIsFirstStepMade(val) {
-    this._isFirstStepMade = val;
   }
 
   /**
