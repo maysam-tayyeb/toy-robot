@@ -26,14 +26,14 @@ Cross-platform. The application can be directly run on  OS X, Microsoft Windows,
 To run the app, you'll need:
 
 * [Node.js](https://nodejs.org/en/download/), an open-source, cross-platform runtime environment for developing server-side web applications.     
-* [npm](https://www.npmjs.com/), a package manager for the Node.js server platform. Node.js comes with npm installed.   
-
-To run tests of the app, you'll need:
-
-* [jasmine-npm](https://github.com/jasmine/jasmine-npm), a Behavior Driven Development testing framework for JavaScript. Install it:
+* [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/en/), package managers for the Node.js server platform. Node.js comes with npm installed.
 
 ```
-$ npm install -g jasmine
+$ npm i
+```
+or
+```
+$ yarn
 ```
 
 The application uses no any third-party modules or packages that should be installed with it.
@@ -67,6 +67,18 @@ Feel free to begin by placing me on the table - PLACE X, Y, F (case insensitive,
 > REPORT
 I am at: 1, 1 towards SOUTH
 ```
+or
+```
+$ yarn start
+
+Welcome to my robotic world!
+
+I will take your orders within the constraints.
+Feel free to begin by placing me on the table - PLACE X, Y, F (case insensitive, spaces are acceptable instead of commas). 'q' to exit.
+> PLACE 1 1 SOUTH
+> REPORT
+I am at: 1, 1 towards SOUTH
+```
 
 To operate the robot using a file, create a file with commands within files directory, e.g. `game1.txt`, with the following contents:
 
@@ -83,6 +95,24 @@ Then run the application providing it the file as the first argument:
 
 ```
 $ npm start game1
+
+Welcome to my robotic world!
+
+I will take your orders within the constraints.
+Feel free to begin by placing me on the table - PLACE X, Y, F (case insensitive, spaces are acceptable instead of commas). 'q' to exit.
+> PLACE 0,0,NORTH
+> MOVE
+> REPORT
+I am at: 0, 1 towards NORTH
+> LEFT
+> MOVE
+Uh oh! No more moves in that direction, else I fall :(.
+> REPORT
+I am at: 0, 1 towards WEST
+```
+or
+```
+$ yarn start game1
 
 Welcome to my robotic world!
 
@@ -132,10 +162,9 @@ Any move that would cause the robot to fall must be ignored.
 
 ### Testing Instructions
 
-[jasmine-npm](https://github.com/jasmine/jasmine-npm) is used for testing.    
 All application components have specs and are tested. You can see their specs here https://github.com/maysam-tayyeb/toy-robot/tree/master/spec
 
-Run `npm test` to run all the tests. Or specify the name of the spec against which to run tests:
+Run `npm test` or `yarn test` to run all the tests. Or specify the name of the spec against which to run tests:
 
 ```
 $ npm test // test all components. runs all possible specs
@@ -144,6 +173,30 @@ $ npm test spec/robotSpec.js // test robot functionality only, runs robotSpec
 $ npm test spec/messengerSpec.js // test messenger functionality only, runs messengerSpec
 $ npm test spec/tableSpec.js // test table functionality only, runs tableSpec
 ```
+or
+```
+$ yarn test // test all components. runs all possible specs
+$ yarn test spec/roboticGameSpec.js // test the game functionality only, runs roboticGameSpec
+$ yarn test spec/robotSpec.js // test robot functionality only, runs robotSpec
+$ yarn test spec/messengerSpec.js // test messenger functionality only, runs messengerSpec
+$ yarn test spec/tableSpec.js // test table functionality only, runs tableSpec
+```
+
+### Code Coverage Instructions
+
+To assess the comprehensiveness of the tests run:
+
+```
+npm run coverage
+```
+or
+```
+yarn coverage
+```
+
+and then browse path/to/toy-robot/coverage/lcov-report/index.html.
+
+Green lines shows they are fully tested and red ones demostrates lack of testing on them
 
 ### Plumbing
 
@@ -177,7 +230,7 @@ The Messenger's configuration data is stored in `config.js` file.
 
 The Table's configuration data is stored in `config.js` file.
 
-**RoboticGame** is a class that combines all components together into a one usable application. It is also the starting point of the game running the app:
+**RoboticGame** is the main class that combines all components together into a one usable application. It is also the starting point of the game running the app:
 
 - run()
 
