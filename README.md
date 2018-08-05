@@ -7,9 +7,8 @@
 [Application Installation Instructions](#application-installation-instructions)   
 [Operating Instructions](#operating-instructions)   
 [Testing Instructions](#testing-instructions)   
-[Code Coverage](#code-coverage)
+[Code Coverage](#code-coverage)   
 [Plumbing](#plumbing)
-
 
 
 ### Description
