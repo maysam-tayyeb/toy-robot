@@ -7,7 +7,8 @@
 [Application Installation Instructions](#application-installation-instructions)   
 [Operating Instructions](#operating-instructions)   
 [Testing Instructions](#testing-instructions)   
-[Plumbing](#plumbing)   
+[Code Coverage](#code-coverage)
+[Plumbing](#plumbing)
 
 
 ### Description
@@ -182,7 +183,7 @@ $ yarn test spec/messengerSpec.js // test messenger functionality only, runs mes
 $ yarn test spec/tableSpec.js // test table functionality only, runs tableSpec
 ```
 
-### Code Coverage Instructions
+### Code Coverage
 
 To assess the comprehensiveness of the tests run:
 
