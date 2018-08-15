@@ -101,17 +101,18 @@ class RoboticGame extends EventEmitter {
    */
   _actionCommand(command) {
     let res;
-    // PLACE X(,| )Y(,| )F(  *)
-    if (command.match(/^\s*place\s+\w+(?:,?\s*|\s+)\w+(?:,?\s*|\s+)\w+\s*$/i)) {
-      let args = command.trim().split(/(?:\s+|,\s*)/i).slice(1);
+
+    command = command.trim();
+    if (command.match(/^place\s+\w+(?:,\s*|\s+)\w+(?:,\s*|\s+)\w+$/i)) {
+      let args = command.split(/(?:\s+|,\s*)/i).slice(1);
       res = this.robot.place(args[0], args[1], args[2]);
-    } else if (command.match(/^move\s*$/i)) {
+    } else if (command.match(/^move$/i)) {
       res = this.robot.move();
-    } else if (command.match(/^left\s*$/i)) {
+    } else if (command.match(/^left$/i)) {
       res = this.robot.left();
-    } else if (command.match(/^right\s*$/i)) {
+    } else if (command.match(/^right$/i)) {
       res = this.robot.right();
-    } else if (command.match(/^report\s*$/i)) {
+    } else if (command.match(/^report$/i)) {
       res = this.robot.report();
     } else {
       res = new Error(this.robot.getMessenger().getMessage({
