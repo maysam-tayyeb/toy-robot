@@ -125,27 +125,28 @@ class RoboticGame extends EventEmitter {
    * Sends a response from _actionCommand() to stdout or stderr
    * @private
    * @method
-   * @param  {Error|String|Object} data either an Error instance, or a message string,
+   * @param  {Error|String|Object} command either an Error instance, or a message string,
    * or robot instance.
    * @return {undefined} no return. the func only sends to stdout or stderr
    */
-  _processInput(data) {
+  _processInput(command) {
     let response;
+    let output = '> ';
 
-    data = data.trim();
+    command = command.trim();
 
-    if (data.match(/(q|quit|exit)/i)) {
+    if (command.match(/(q|quit|exit)/i)) {
       process.exit();
     }
 
-    response = this._actionCommand(data);
+    response = this._actionCommand(command);
     if (response instanceof Error) {
-      stdout.write(response.message + EOL + '> ');
+      output = `${response.message}${EOL}${output}`;
     } else if (typeof response === 'string') {
-      stdout.write(response + EOL + '> ');
-    } else {
-      stdout.write('> ');
+      output = `${response}${EOL}${output}`;
     }
+
+    stdout.write(output);
   }
 
   _welcomePlayer() {
