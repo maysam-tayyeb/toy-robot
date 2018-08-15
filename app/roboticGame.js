@@ -148,16 +148,18 @@ class RoboticGame extends EventEmitter {
     }
   }
 
+  _welcomePlayer() {
+    stdout.write(this.robot.getMessenger().getMessage({
+      msg: 'welcome',
+      eol: EOL
+    }) + EOL + '> ');
+  }
+
   _initializeStdIn() {
     // read stdin
     // this piece of code is for reading user's input from CLI
     stdin.setEncoding('utf8');
     stdin.on('data', (data) => this._processInput(data));
-
-    stdout.write(this.robot.getMessenger().getMessage({
-      msg: 'welcome',
-      eol: EOL
-    }) + EOL + '> ');
 
     stdin.resume();
   }
@@ -167,6 +169,7 @@ class RoboticGame extends EventEmitter {
       this._readFromFile(argv[0]);
     }
 
+    this._welcomePlayer();
     this._initializeStdIn();
   };
 }

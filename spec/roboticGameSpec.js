@@ -218,7 +218,7 @@ describe('Game on', function() {
       eol: EOL
     }) + EOL + '> ';
 
-    game._initializeStdIn();
+    game._welcomePlayer();
     inspect.restore();
 
     expect(inspect.output.join('')).toEqual(expectedOutput);
