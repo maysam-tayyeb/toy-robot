@@ -104,7 +104,7 @@ class RoboticGame extends EventEmitter {
 
     command = command.trim();
     if (command.match(/^place\s+\w+(?:,\s*|\s+)\w+(?:,\s*|\s+)\w+$/i)) {
-      let args = command.split(/(?:\s+|,\s*)/i).slice(1);
+      let args = command.split(/(?:\s+|,\s*)/).slice(1);
       res = this.robot.place(args[0], args[1], args[2]);
     } else if (command.match(/^move$/i)) {
       res = this.robot.move();
@@ -134,9 +134,7 @@ class RoboticGame extends EventEmitter {
     let response;
     let output = '> ';
 
-    command = command.trim();
-
-    if (command.match(/(q|quit|exit)/i)) {
+    if (command.trim().match(/(q|quit|exit)/i)) {
       process.exit();
     }
 
