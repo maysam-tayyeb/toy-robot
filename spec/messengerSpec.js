@@ -21,54 +21,24 @@ describe('The Messenger', () => {
   });
 
   it('should throw an error when get message with no config', () => {
-    expect(messenger.getMessage().message).toEqual(new Error(messenger.getMessage({
+    expect(messenger.getMessage()).toEqual(new Error(messenger.getMessage({
       msg: 'needMessageConfig'
-    })).message);
+    })));
   });
 
   it('should throw an error when get message with wrong key', () => {
     let wrongKey = 'blah';
-    expect(messenger.getMessage({ msg: wrongKey }).message).toEqual(new Error(messenger.getMessage({
+    expect(messenger.getMessage({ msg: wrongKey })).toEqual(new Error(messenger.getMessage({
       msg: 'messageKeyNotFound',
       key: wrongKey
-    })).message);
+    })));
   });
 
-  /**
-   * To test each message separatly is not a good solution - it makes us to
-   * manually create a new it('...') everytime we have a new message.
-   */
   it('== should output correct noInitialCommand message ==', () =>
-    expect(messenger.getMessage({
-      msg: 'noInitialCommand'
-    })).toEqual(messenger._generateMessage({
+    expect(messenger.getMessage({ msg: 'noInitialCommand' })).toEqual(messenger._generateMessage({
       msg: 'noInitialCommand',
-      x: x,
-      y: y,
-      f: f,
       ci: '(case insensitive, spaces are acceptable instead of commas)'
     }))
-  );
-
-  it('should output correct default welcome message', () =>
-    expect(messenger.getMessage()).toEqual(new TypeError(
-      messenger.getMessage({
-        msg: 'needMessageConfig'
-      })
-    ))
-  );
-
-  let key = 'FooBlaBla';
-
-  it('should output correct default welcome message', () =>
-    expect(messenger.getMessage({
-      msg: key
-    })).toEqual(new TypeError(
-      messenger.getMessage({
-        msg: 'messageKeyNotFound',
-        key,
-      })
-    ))
   );
 
   /**
